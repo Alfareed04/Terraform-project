@@ -1,0 +1,1 @@
+This project is a robust template for scalable Azure solutions, leveraging Terraform's IaC (Infrastructure as Code) capabilities.

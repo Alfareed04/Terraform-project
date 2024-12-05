@@ -1,0 +1,1 @@
+This infrastructure is optimized for secure, scalable, and highly available Azure cloud deployment.
