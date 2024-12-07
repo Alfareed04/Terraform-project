@@ -3,11 +3,11 @@ variable "keyvault_name" {
 }
 
 variable "location" {
-  type        = string
+  type = string
 }
 
 variable "resource_name" {
-  type        = string
+  type = string
 }
 
 variable "sku_name" {
@@ -26,22 +26,28 @@ variable "soft_delete_retention_days" {
   type = number
 }
 
-variable "access_policy_tenant_id" {
-  type = string
+variable "access_policies" {
+  type = list(object({
+    tenant_id               = string
+    object_id               = string
+    secret_permissions      = list(string)
+    certificate_permissions = list(string)
+    key_permissions         = list(string)
+  }))
 }
 
-variable "access_policy_object_id" {
-  type = string
+variable "keys" {
+  type = list(object({
+    name      = string
+    key_type  = string
+    key_size  = number
+    key_opts  = list(string)
+  }))
 }
 
-variable "access_policy_secret_permissions" {
-  type = list(string)
-}
-
-variable "access_policy_key_permissions" {
-  type = list(string)
-}
-
-variable "certificate_permissions" {
-  type = list(string)
+variable "secrets" {
+  type = list(object({
+    name  = string
+    value = string
+  }))
 }

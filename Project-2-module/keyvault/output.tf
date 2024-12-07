@@ -9,3 +9,4 @@ output "keyvault" {
 output "id" {
   value = azurerm_key_vault.Key_vault.id
 }
+
