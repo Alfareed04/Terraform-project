@@ -8,7 +8,7 @@ terraform {
   required_version = ">= 1.1.0" // Create a Resource Group using Terraform
 
 
-    backend "azurerm" {
+  backend "azurerm" {
     resource_group_name  = "backend_rg"
     storage_account_name = "stgacctconfig"
     container_name       = "container-config"
@@ -142,35 +142,37 @@ module "ass_rt" {
 // nsg
 
 module "nsg" {
-  source        = "../Project-2-module/nsg"
-  nsg_name      = var.nsg_name
-  resource_name = data.azurerm_resource_group.rg.name
-  location      = data.azurerm_resource_group.rg.location
+  source         = "../Project-2-module/nsg"
+  for_each       = var.nsg_config
+  nsg_name       = each.key
+  resource_name  = data.azurerm_resource_group.rg.name
+  location       = data.azurerm_resource_group.rg.location
+  security_rules = each.value.security_rules
 
   depends_on = [data.azurerm_resource_group.rg, data.azurerm_virtual_network.vnet]
 }
 
-//nsg-rule
+# //nsg-rule
 
-module "nsg_rule" {
-  source        = "../Project-2-module/nsg-rule"
-  for_each      = var.security_rules
-  nsg_name      = each.key
-  resource_name = data.azurerm_resource_group.rg.name
-  location      = data.azurerm_resource_group.rg.location
+# module "nsg_rule" {
+#   source        = "../Project-2-module/nsg-rule"
+#   for_each      = var.security_rules
+#   nsg_name      = each.key
+#   resource_name = data.azurerm_resource_group.rg.name
+#   location      = data.azurerm_resource_group.rg.location
 
-  name                       = each.value.name
-  priority                   = each.value.priority
-  direction                  = each.value.direction
-  access                     = each.value.access
-  protocol                   = each.value.protocol
-  source_port_range          = each.value.source_port_range
-  destination_port_range     = each.value.destination_port_ranges
-  source_address_prefix      = each.value.source_address_prefix
-  destination_address_prefix = each.value.destination_address_prefix
+#   name                       = each.value.name
+#   priority                   = each.value.priority
+#   direction                  = each.value.direction
+#   access                     = each.value.access
+#   protocol                   = each.value.protocol
+#   source_port_range          = each.value.source_port_range
+#   destination_port_range     = each.value.destination_port_ranges
+#   source_address_prefix      = each.value.source_address_prefix
+#   destination_address_prefix = each.value.destination_address_prefix
 
-  depends_on = [module.nsg]
-}
+#   depends_on = [module.nsg]
+# }
 
 //nsg associate subnet
 

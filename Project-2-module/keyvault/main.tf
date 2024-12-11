@@ -17,32 +17,26 @@ resource "azurerm_key_vault" "Key_vault" {
       key_permissions         = access_policy.value.key_permissions
     }
   }
+}
 
-  dynamic "key" {
-    for_each = var.keys
-    content {
-      name     = key.value.name
-      key_type = key.value.key_type
-      key_size = key.value.key_size
-      key_opts = key.value.key_opts
-    }
-  }
+resource "azurerm_key_vault_key" "key" {
+  name         = var.key_name
+  key_vault_id = azurerm_key_vault.Key_vault.id
+  key_type     = var.key_type
+  key_size     = var.key_size
 
-  dynamic "secrets" {
-    for_each = var.secrets
-    content {
-      name  = secrets.value.name
-      value = secrets.value.value
-    }
-  }
+  key_opts = var.key_opts
 
 }
 
-# access_policy {
-#   tenant_id = var.access_policy_tenant_id
-#   object_id = var.access_policy_object_id
+resource "azurerm_key_vault_secret" "admin-username" {
+  name         = var.admin_username
+  value        = var.admin_value
+  key_vault_id = azurerm_key_vault.Key_vault.id
+}
 
-#   secret_permissions = var.access_policy_secret_permissions
-#   certificate_permissions = var.certificate_permissions
-#   key_permissions = var.access_policy_key_permissions
-# }
+resource "azurerm_key_vault_secret" "admin-password" {
+  name         = var.admin_password
+  value        = var.password_value
+  key_vault_id = azurerm_key_vault.Key_vault.id
+}

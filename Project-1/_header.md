@@ -14,3 +14,17 @@
 
 7. <b>NSG Association:</b> Associates the NSG with a specified subnet (in this case, "SubnetApp").
 
+## Architecture Diagram
+![Project-1](https://github.com/user-attachments/assets/a1ca70e1-0ccc-4388-9908-9bf27510ee11)
+
+## Run the Terraform configurations :
+Deploy the resources using Terraform,
+```
+terraform init
+```
+```
+terraform plan
+```
+```
+terraform apply
+```

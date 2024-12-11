@@ -3,33 +3,33 @@
 
 subnets = {
   "subnet01" = {
-    subnet_name = "subnet01"
+    subnet_name    = "subnet01"
     address_prefix = "10.2.5.0/24"
   },
   "subnet02" = {
-    subnet_name = "subnet02"
+    subnet_name    = "subnet02"
     address_prefix = "10.2.6.0/24"
   }
 }
 
 virtual_machine_name = "project4-vm"
-nic_name = "VM-nic"
+nic_name             = "VM-nic"
 
 keyvault_name = "KV-proj4"
 access_policies = [
   {
-    tenant_id               = "data.azurerm_client_config.current.tenant_id"
-    object_id               = "data.azuread_client_config.current.object_id"
-    secret_permissions      = [ 
+    tenant_id = "data.azurerm_client_config.current.tenant_id"
+    object_id = "data.azuread_client_config.current.object_id"
+    secret_permissions = [
       "Get",
       "Set",
       "Backup",
       "Delete",
-      "Purge", 
+      "Purge",
       "List",
       "Recover",
-      "Restore"  
-  ]
+      "Restore"
+    ]
     certificate_permissions = [
       "Get",
       "List",
@@ -42,41 +42,45 @@ access_policies = [
       "Purge",
       "Recover"
     ]
-    key_permissions         = [
+    key_permissions = [
       "Get",
       "Encrypt",
       "Backup",
       "Delete",
-      "Purge", 
+      "Purge",
       "List",
       "Recover",
       "Restore",
       "Create"
-  ]
+    ]
   }
 ]
 
-keys = [
-  {
-    name      = "keyvault-key"
-    key_type  = "RSA"
-    key_size  = 2048
-    key_opts  = ["encrypt", "decrypt"]
-  }
-]
 
-secrets = [
-  {
-    name  = "admin-password"
-    value = "SecureP@ssw0rd188"
-  },
-  {
-    name  = "admin-username"
-    value = "azureuser"
-  }
-]
+key_name = "keyvault-key"
+key_type = "RSA"
+key_size = 2048
+key_opts = ["encrypt", "decrypt"]
 
-public_ip_name = "proj4-public-ip"
+
+admin_username = "admin-username"
+admin_value = "azureuser"
+admin_password = "admin-password"
+password_value = "SecureP@ssw0rd400"
+
+# secrets = {
+#   "admin-password" = {
+#     name  = "admin-password"
+#     value = "SecureP@ssw0rd188"
+#   },
+
+#  "admin-username" =  {
+#     name  = "admin-username"
+#     value = "azureuser"
+#   }
+# }
+
+public_ip_name     = "proj4-public-ip"
 load_balancer_name = "proj4-lb"
 
 frontend_ip_configurations = [
@@ -113,8 +117,8 @@ rules = [
   }
 ]
 
-disk_encryption_name = "Diskencryption"
-os_disk_name = "VM-disk"
-storage_account_name = "prj4storage"
+disk_encryption_name        = "Diskencryption"
+os_disk_name                = "VM-disk"
+storage_account_name        = "prj4storage"
 user_assigned_identity_name = "key-identity"
-disk_name = "Disk"
+disk_name                   = "Disk"

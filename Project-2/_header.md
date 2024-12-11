@@ -33,3 +33,18 @@ The project leverages Terraform to create an Azure environment with a set of ess
 ### Conclusion:
 
 This Terraform-based project automates the process of setting up a secure, scalable network architecture on Azure, streamlining the deployment of VNets, subnets, security groups, and routing tables. The use of modules enhances reusability and maintainability, making it easier to manage the resources as the project grows.
+
+## Architecture Diagram
+![Project-2](https://github.com/user-attachments/assets/b963ba05-f7cb-41a6-a0b7-511405c76d19)
+
+## Run the Terraform configurations :
+Deploy the resources using Terraform,
+```
+terraform init
+```
+```
+terraform plan
+```
+```
+terraform apply
+```

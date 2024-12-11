@@ -75,20 +75,43 @@ variable "access_policies" {
   }))
 }
 
-variable "keys" {
-  type = list(object({
-    name      = string
-    key_type  = string
-    key_size  = number
-    key_opts  = list(string)
-  }))
+variable "key_name" {
+  type = string
 }
 
-variable "secrets" {
-  type = list(object({
-    name  = string
-    value = string
-  }))
+variable "key_type" {
+  type = string
+}
+
+variable "key_size" {
+  type = number
+}
+
+variable "key_opts" {
+  type = list(string)
+}
+
+# variable "secrets" {
+#   type = map(object({
+#     name  = string
+#     value = string
+#   }))
+# }
+
+variable "admin_username" {
+  type = string
+}
+
+variable "admin_value" {
+  type = string
+}
+
+variable "admin_password" {
+  type = string
+}
+
+variable "password_value" {
+  type = string
 }
 
 variable "frontend_ip_configurations" {
