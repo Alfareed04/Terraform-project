@@ -7,29 +7,25 @@ variable "location" {
 }
 
 variable "vnet" {
-
-type = map(object({
-  name = string
-  address_space = string
-})) 
-}
-
-variable "subnets" {
   type = map(object({
-    subnet_name = string
-    address_prefix = string
+    name          = string
+    address_space = list(string)
+    subnets = map(object({
+      subnet_name    = string
+      address_prefix = list(string)
+    }))
   }))
 }
 
 variable "nsg" {
   type = map(object({
-    nsg_name    = string
+    nsg_name = string
   }))
 }
 
 variable "nsg_config" {
   type = map(object({
-    nsg_name       = string
+    nsg_name = string
     security_rules = list(object({
       name                       = string
       priority                   = number

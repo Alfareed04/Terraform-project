@@ -91,31 +91,15 @@ frontend_ip_configurations = [
   }
 ]
 
-backend_address_pools = [
-  {
-    name = "backend-pool-1"
-  }
-]
-
-probes = [
-  {
-    name     = "http-probe"
-    protocol = "Http"
-    port     = 80
-  }
-]
-
-rules = [
-  {
-    name                           = "http-rule"
-    frontend_ip_configuration_name = "frontend-ip-1"
-    backend_address_pool_id        = "/subscriptions/<sub_id>/resourceGroups/<rg_name>/providers/Microsoft.Network/loadBalancers/<lb_name>/backendAddressPools/backend-pool-1"
-    protocol                       = "Tcp"
-    frontend_port                  = 80
-    backend_port                   = 80
-    probe_id                       = "/subscriptions/<sub_id>/resourceGroups/<rg_name>/providers/Microsoft.Network/loadBalancers/<lb_name>/probes/http-probe"
-  }
-]
+backend_name = "BackEndpool"
+lb_probe_name = "lb-probe"
+protocol = "Tcp"
+port = 80
+lb_rule_name = "lb-rule"
+frontend_ip_configuration_name = "proj4-frontend-ip"
+rule_protocol = "Tcp"
+frontend_port = 80
+backend_port = 80
 
 disk_encryption_name        = "Diskencryption"
 os_disk_name                = "VM-disk"

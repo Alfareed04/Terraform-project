@@ -12,6 +12,14 @@ output "name" {
 #   value       = [for subnet in azurerm_virtual_network.vnet.subnet : subnet.id]
 # }
 
-# output "subnet" {
-#   value = azurerm_virtual_network.vnet.subnet
+output "subnet" {
+  value = azurerm_subnet.subnet
+}
+
+# output "subnet_id" {
+#   value = azurerm_subnet.subnet[each.key].id
 # }
+
+output "subnet_id" {
+  value = [for subnet in azurerm_subnet.subnet : subnet.id]
+}

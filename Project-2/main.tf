@@ -10,7 +10,7 @@ terraform {
 
   backend "azurerm" {
     resource_group_name  = "backend_rg"
-    storage_account_name = "stgacctconfig"
+    storage_account_name = "backendstgconfig"
     container_name       = "container-config"
     key                  = "Terraform-project.tfstate"
   }

@@ -2,28 +2,27 @@ resource_name = "Project3-rg"
 location      = "East US"
 
 vnet = {
-  "project3_vnet" = {
+  project3_vnet = {
     name          = "project3_vnet"
-    address_space = "10.2.0.0/16"
-  }
-}
-
-subnets = {
-  "subnet1" = {
-    subnet_name    = "subnet1"
-    address_prefix = "10.2.1.0/24"
-  },
-  "subnet2" = {
-    subnet_name    = "subnet2"
-    address_prefix = "10.2.2.0/24"
-  },
-  "subnet3" = {
-    subnet_name    = "subnet3"
-    address_prefix = "10.2.3.0/24"
-  },
-  "subnet4" = {
-    subnet_name    = "subnet4"
-    address_prefix = "10.2.4.0/24"
+    address_space = ["10.2.0.0/16"]
+    subnets = {
+      subnet1 = {
+        subnet_name    = "subnet1"
+        address_prefix = ["10.2.1.0/24"]
+      },
+      subnet2 = {
+        subnet_name    = "subnet2"
+        address_prefix = ["10.2.2.0/24"]
+      },
+      subnet3 = {
+        subnet_name    = "subnet3"
+        address_prefix = ["10.2.3.0/24"]
+      },
+      subnet4 = {
+        subnet_name    = "subnet4"
+        address_prefix = ["10.2.4.0/24"]
+      }
+    }
   }
 }
 

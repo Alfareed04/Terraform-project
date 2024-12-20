@@ -10,7 +10,7 @@ terraform {
 
   backend "azurerm" {
     resource_group_name  = "backend_rg"
-    storage_account_name = "stgacctconfig"
+    storage_account_name = "backendstgconfig"
     container_name       = "container-config"
     key                  = "Terraform-project.tfstate"
   }
@@ -19,21 +19,6 @@ terraform {
 provider "azurerm" {
   features {}
 }
-
-# // projct3 resources
-
-# data "azurerm_resource_group" "rg" {
-#   name = "Project3-rg"
-# }
-
-# // project3 vnet
-
-# data "azurerm_virtual_network" "vnet" {
-#   name = "project3_vnet"
-#   resource_group_name = "Project3-rg"
-
-#   depends_on = [ data.azurerm_resource_group.rg ]
-# }
 
 // create subnet
 
@@ -52,81 +37,6 @@ module "subnets" {
 
 data "azurerm_client_config" "current" {}
 data "azuread_client_config" "current" {}
-
-# module "keyvault" {
-#   source = "../Project-2-module/keyvault"
-#   keyvault_name = var.keyvault_name
-#   resource_name = data.azurerm_resource_group.rg.name
-#   location = data.azurerm_resource_group.rg.location
-#   sku_name                    = "standard"
-#   tenant_id                   = data.azurerm_client_config.current.tenant_id
-#   purge_protection_enabled    = true
-#   soft_delete_retention_days = 30
-#   access_policy_tenant_id = data.azurerm_client_config.current.tenant_id
-#   access_policy_object_id = data.azuread_client_config.current.object_id
-#   access_policy_secret_permissions = [ 
-#       "Get",
-#       "Set",
-#       "Backup",
-#       "Delete",
-#       "Purge", 
-#       "List",
-#       "Recover",
-#       "Restore"  
-#   ]
-
-#   certificate_permissions = [
-#       "Get",
-#       "List",
-#       "Create",
-#       "Delete",
-#       "Update",
-#       "Import",
-#       "ManageContacts",
-#       "ManageIssuers",
-#       "Purge",
-#       "Recover"
-#     ]
-
-#   access_policy_key_permissions = [
-#       "Get",
-#       "Encrypt",
-#       "Backup",
-#       "Delete",
-#       "Purge", 
-#       "List",
-#       "Recover",
-#       "Restore",
-#       "Create"
-#   ]
-
-# }
-
-# module "admin_username" {
-#   source = "../Project-2-module/keyvault-username"
-#   username = "keyvault-username"
-#   value = var.admin_username
-#   key_vault_id = module.keyvault.id
-#   depends_on = [ module.keyvault ]
-# }
-
-# module "admin_password" {
-#   source = "../Project-2-module/keyvault-password"
-#   password = "keyvault-password"
-#   value = var.admin_password
-#   key_vault_id = module.keyvault.id
-#   depends_on = [ module.admin_username ]
-# }
-
-# module "keyvault_key" {
-#   source = "../Project-2-module/keyvault-key"
-#   key_name = var.key_name
-#   key_vault_id = module.keyvault.id
-#   key_type     = "RSA"
-#   key_size     = 2048
-#   key_opts     = ["encrypt", "decrypt"] 
-#   depends_on = [ module.keyvault]
-# }
 
 module "keyvault" {
   source                     = "../Project-2-module/keyvault"
@@ -191,9 +101,9 @@ module "disk_encryption" {
   disk_encryption_name = var.disk_encryption_name
   resource_name        = local.rg.name
   location             = local.rg.location
-  keyvault_key_id      = module.keyvault_key.id
+  keyvault_key_id      = module.keyvault.key_id
 
-  depends_on = [module.keyvault, module.keyvault_key]
+  depends_on = [module.keyvault]
 }
 
 // Disk attach vm
@@ -210,58 +120,24 @@ module "disk_attach_vm" {
 //load balancer
 
 module "load_balancer" {
-  source                     = "../Project-2-module/load-balancer"
-  load_balancer_name         = var.load_balancer_name
-  resource_name              = local.rg.name
-  location                   = local.rg.location
-  sku                        = "Standard"
-  frontend_ip_configurations = var.frontend_ip_configurations
-  probes                     = var.probes
-  rules                      = var.rules
-  backend_address_pools      = var.backend_address_pools
+  source                         = "../Project-2-module/load-balancer"
+  load_balancer_name             = var.load_balancer_name
+  resource_name                  = local.rg.name
+  location                       = local.rg.location
+  sku                            = "Standard"
+  frontend_ip_configurations     = var.frontend_ip_configurations
+  backend_name                   = var.backend_name
+  lb_probe_name                  = var.lb_probe_name
+  protocol                       = var.protocol
+  port                           = var.port
+  lb_rule_name                   = var.lb_rule_name
+  frontend_ip_configuration_name = var.frontend_ip_configuration_name
+  rule_protocol                  = var.rule_protocol
+  frontend_port                  = var.frontend_port
+  backend_port                   = var.backend_port
 
   depends_on = [local.rg, module.subnets]
 }
-
-# //backendpool
-
-# module "lb_backend_pool" {
-#   source = "../Project-2-module/lb_backendpool"
-#   backend_pool_name = "proj4-backend-pool"
-#   loadbalancer_id = module.load_balancer.id
-
-#   depends_on = [ module.load_balancer ]
-# }
-
-# //lb health probe
-
-# module "lb_health_probe" {
-#   source = "../Project-2-module/lb-health-probe"
-#   lb_probe_name = "proj4-probe"
-#   resource_name = local.rg.name
-#   loadbalancer_id = module.load_balancer.id
-#   protocol = "Tcp"
-#   port = 80
-
-#   depends_on = [ module.load_balancer ]
-# }
-
-# // lb rule
-
-# module "lb_rule" {
-#   source = "../Project-2-module/lb-rule"
-#   lb_rule_name = "proj4-lbrule"
-#   resource_name = local.rg.name
-#   loadbalancer_id = module.load_balancer.id
-#   frontend_ip_configuration_name = "proj4-frontend-ip"
-#   backend_address_pool_ids = [ module.lb_backend_pool.id ]
-#   probe_id = module.lb_health_probe.id
-#   protocol = "Tcp"
-#   frontend_port = 80
-#   backend_port = 80
-
-#   depends_on = [ data.azurerm_resource_group.rg, module.load_balancer, module.lb_backend_pool, module.lb_health_probe ]
-# }
 
 //storage account
 
@@ -294,7 +170,7 @@ module "nic" {
 module "nic_associate" {
   source                  = "../Project-2-module/backend-pool-associate"
   network_interface_id    = module.nic.id
-  backend_address_pool_id = module.keyvault.l
+  backend_address_pool_id = module.load_balancer.backendpool_id
   ip_configuration_name   = "internal"
 
   depends_on = [module.keyvault, module.nic]
@@ -308,8 +184,8 @@ module "virtual_machine" {
   resource_name                = local.rg.name
   location                     = local.rg.location
   vm_size                      = "Standard_D2s_V3"
-  admin_username               = module.keyvault.secrets.value
-  admin_password               = module.keyvault.secrets.value
+  admin_username               = module.keyvault.admin_username
+  admin_password               = module.keyvault.admin_password
   network_interface_ids        = [module.nic.id]
   os_disk_name                 = var.os_disk_name
   os_disk_caching              = "ReadWrite"

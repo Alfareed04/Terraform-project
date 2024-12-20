@@ -5,12 +5,12 @@ terraform {
       version = "~> 3.0.2"
     }
   }
-  required_version = ">= 1.1.0" // Create a Resource Group using Terraform
+  required_version = ">= 1.1.0" 
 
 
   backend "azurerm" {
     resource_group_name  = "backend_rg"
-    storage_account_name = "stgacctconfig"
+    storage_account_name = "backendstgconfig"
     container_name       = "container-config"
     key                  = "Terraform-project.tfstate"
   }

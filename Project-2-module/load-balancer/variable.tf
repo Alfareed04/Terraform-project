@@ -22,28 +22,38 @@ variable "frontend_ip_configurations" {
   }))
 }
 
-variable "backend_address_pools" {
-  type = list(object({
-    name = string
-  }))
+variable "backend_name" {
+  type = string
 }
 
-variable "probes" {
-  type = list(object({
-    name     = string
-    protocol = string
-    port     = number
-  }))
+variable "lb_probe_name" {
+  type = string
 }
 
-variable "rules" {
-  type = list(object({
-    name                           = string
-    frontend_ip_configuration_name = string
-    backend_address_pool_id        = string
-    protocol                       = string
-    frontend_port                  = number
-    backend_port                   = number
-    probe_id                       = string
-  }))
+variable "protocol" {
+  type = string
+}
+
+variable "port" {
+  type = number
+}
+
+variable "lb_rule_name" {
+  type = string
+}
+
+variable "frontend_ip_configuration_name" {
+    type = string  
+}
+
+variable "rule_protocol" {
+  type = string
+}
+
+variable "frontend_port" {
+  type = number
+}
+
+variable "backend_port" {
+  type = number
 }

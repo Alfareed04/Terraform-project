@@ -27,34 +27,27 @@ resource "azurerm_lb" "load_balancer" {
       private_ip_address_allocation     = frontend_ip_configuration.value.private_ip_address_allocation
     }
   }
-
-  dynamic "backend_address_pool" {
-    for_each = var.backend_address_pools
-    content {
-      name = backend_address_pool.value.name
-    }
-  }
-
-  dynamic "probe" {
-    for_each = var.probes
-    content {
-      name     = probe.value.name
-      protocol = probe.value.protocol
-      port     = probe.value.port
-    }
-  }
-
-  dynamic "rule" {
-    for_each = var.rules
-    content {
-      name                           = rule.value.name
-      frontend_ip_configuration_name = rule.value.frontend_ip_configuration_name
-      backend_address_pool_id        = rule.value.backend_address_pool_id
-      protocol                       = rule.value.protocol
-      frontend_port                  = rule.value.frontend_port
-      backend_port                   = rule.value.backend_port
-      probe_id                       = rule.value.probe_id
-    }
-  }
 }
 
+resource "azurerm_lb_backend_address_pool" "backendpool" {
+  loadbalancer_id = azurerm_lb.load_balancer.id
+  name            = var.backend_name
+}
+  
+resource "azurerm_lb_probe" "lb_health_probe" {
+  name                = var.lb_probe_name
+  loadbalancer_id     = azurerm_lb.load_balancer.id
+  protocol            = var.protocol
+  port                = var.port
+} 
+
+resource "azurerm_lb_rule" "lb_rule" {
+  name                           = var.lb_rule_name
+  loadbalancer_id                = azurerm_lb.load_balancer.id
+  frontend_ip_configuration_name = var.frontend_ip_configuration_name
+  backend_address_pool_ids       = azurerm_lb_backend_address_pool.backendpool.id
+  probe_id                       = azurerm_lb_probe.lb_health_probe.id
+  protocol                       = var.rule_protocol
+  frontend_port                  = var.frontend_port
+  backend_port                   = var.backend_port
+}
