@@ -9,17 +9,13 @@ variable "location" {
 }
 
 variable "vnets" {
-
-type = map(object({
-  name = string
-  address_space = string
-})) 
-}
-
-variable "subnets" {
   type = map(object({
-    subnet_name = string
-    address_prefix = string
+    name          = string
+    address_space = list(string)
+    subnets = map(object({
+      subnet_name    = string
+      address_prefix = list(string)
+    }))
   }))
 }
 

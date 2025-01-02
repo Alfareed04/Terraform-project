@@ -26,25 +26,37 @@ module "rg" {
   location      = var.location
 }
 
+# module "vnet" {
+#   source        = "../Project-2-module/vnet"
+#   for_each      = var.vnets
+#   vnet_name     = each.key
+#   address_space = [each.value.address_space]
+#   location      = module.rg.location
+#   resource_name = module.rg.resource_name
+#   depends_on    = [module.rg]
+# }
+
 module "vnet" {
   source        = "../Project-2-module/vnet"
   for_each      = var.vnets
   vnet_name     = each.key
-  address_space = [each.value.address_space]
-  location      = module.rg.location
   resource_name = module.rg.resource_name
-  depends_on    = [module.rg]
+  location      = module.rg.location
+  address_space = each.value.address_space
+  subnets       = each.value.subnets
+
+  depends_on = [module.rg]
 }
 
-module "subnet" {
-  source         = "../Project-2-module/subnet"
-  for_each       = var.subnets
-  subnet_name    = each.value.subnet_name
-  address_prefix = each.value.address_prefix
-  resource_name  = module.rg.resource_name
-  virtual_name   = module.vnet["project2_vnet"].name
-  depends_on     = [module.rg, module.vnet]
-}
+# module "subnet" {
+#   source         = "../Project-2-module/subnet"
+#   for_each       = var.subnets
+#   subnet_name    = each.value.subnet_name
+#   address_prefix = each.value.address_prefix
+#   resource_name  = module.rg.resource_name
+#   virtual_name   = module.vnet["project2_vnet"].name
+#   depends_on     = [module.rg, module.vnet]
+# }
 
 module "nsg" {
   source         = "../Project-2-module/nsg"

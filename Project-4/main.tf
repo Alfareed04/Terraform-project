@@ -27,8 +27,8 @@ module "subnets" {
   for_each       = var.subnets
   subnet_name    = each.key
   address_prefix = each.value.address_prefix
-  resource_name  = local.vnet[each.key].resource_group_name
-  virtual_name   = local.vnet[each.key].name
+  resource_name  = local.vnet["Project3-vnet"].resource_group_name
+  virtual_name   = local.vnet["Project3-vnet"].name
 
   depends_on = [local.rg, local.vnet]
 }

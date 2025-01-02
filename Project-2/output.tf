@@ -5,7 +5,3 @@ output "rg" {
 output "vnet" {
   value = module.vnet
 }
-
-output "subnet" {
-  value = module.subnet
-}

@@ -1,18 +1,17 @@
 resource_name = "Project2-rg"
 location = "East US"
 
-vnets={
-    "project2_vnet" ={
-        name="project2_vnet"
-        address_space="10.1.0.0/16"
+vnets = {
+  project2_vnet = {
+    name          = "project2_vnet"
+    address_space = ["10.1.0.0/16"]
+    subnets = {
+      Subnet = {
+        subnet_name    = "Subnet"
+        address_prefix = ["10.1.1.0/24"]
+      }
     }
-}
-
-subnets={
-    "Subnet" ={
-        subnet_name ="Subnet"
-        address_prefix = "10.1.1.0/24"
-    }
+  }
 }
 
 nsg_name = "nsg"
